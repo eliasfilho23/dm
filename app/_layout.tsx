@@ -6,16 +6,20 @@ import {
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
+import * as NavigationBar from "expo-navigation-bar";
 import "react-native-reanimated";
 
 import { useColorScheme } from "@/hooks/useColorScheme";
-import { Image, View } from "react-native";
+import { Image, Text, View } from "react-native";
 import { ThemedText } from "@/components/ThemedText";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
+import { ThemedView } from "@/components/ThemedView";
+import { create } from "zustand";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
+
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -39,14 +43,17 @@ export default function RootLayout() {
         screenOptions={{
           header: () => {
             return (
-                <Image
-                 style={{height: 175, width: '100%'}}
-                  source={require('@/assets/images/header.png')}
-                />
-            )}
+              <Image
+                style={{ height: 175, width: "100%" }}
+                source={require("@/assets/images/header.png")}
+              />
+            );
+          },
         }}
       >
-        <Stack.Screen name="(tabs)"/>
+        <Stack.Screen name="signUp" />
+        <Stack.Screen name="signIn" />
+        <Stack.Screen name="(tabs)" />
         <Stack.Screen name="+not-found" />
       </Stack>
     </ThemeProvider>

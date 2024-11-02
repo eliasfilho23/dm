@@ -23,15 +23,19 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "",
+          headerShown: false,
+          title: '',
           tabBarIcon: ({ focused }) => (
             <TabBarIcon
               useDefaultIcons={false}
-              iconName={"header"}
+              source={require("@/assets/svgs/home.svg")}
               style={{
                 backgroundColor: "#FEA873",
                 borderRadius: 10,
                 padding: 8,
+              }}
+              imageStyle={{
+                width: '110%'
               }}
               name={focused ? "home-outline" : "home"}
               color={"#5A240C"}
@@ -39,12 +43,17 @@ export default function TabLayout() {
           ),
         }}
       />
-      {/* <Tabs.Screen
-        name="explore"
+      <Tabs.Screen
+        name="library"
         options={{
-          title: "",
+          title: '',
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
+              useDefaultIcons={false}
+              imageStyle={{
+                
+              }}
+              source={require("@/assets/svgs/book.svg")}
               name={focused ? "code-slash" : "code-slash-outline"}
               color={color}
             />
@@ -54,9 +63,11 @@ export default function TabLayout() {
       <Tabs.Screen
         name="tournaments"
         options={{
-          title: "",
+          title: '',
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
+              useDefaultIcons={false}
+              source={require("@/assets/svgs/trophy-full.svg")}
               name={focused ? "code-slash" : "code-slash-outline"}
               color={color}
             />
@@ -64,17 +75,64 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="profilePage"
+        name="tournaments/[id]"
         options={{
-          title: "",
+          href: null,
+          title: '',
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
+              useDefaultIcons={false}
+              source={require("@/assets/svgs/trophy-full.svg")}
               name={focused ? "code-slash" : "code-slash-outline"}
               color={color}
             />
           ),
         }}
-      /> */}
+      />
+      <Tabs.Screen
+        name="tournaments/subscription"
+        options={{
+          href: null,
+          title: '',
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon
+              useDefaultIcons={false}
+              source={require("@/assets/svgs/trophy-full.svg")}
+              name={focused ? "code-slash" : "code-slash-outline"}
+              color={color}
+            />
+          ),
+        }}
+      />
+            <Tabs.Screen
+        name="tournaments/create-new"
+        options={{
+          href: null,
+          title: '',
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon
+              useDefaultIcons={false}
+              source={require("@/assets/svgs/trophy-full.svg")}
+              name={focused ? "code-slash" : "code-slash-outline"}
+              color={color}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="profile-page"
+        options={{
+          title: '',
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon
+              useDefaultIcons={false}
+              source={require("@/assets/svgs/profile.svg")}
+              name={focused ? "code-slash" : "code-slash-outline"}
+              color={color}
+            />
+          ),
+        }}
+      />
     </Tabs>
   );
 }

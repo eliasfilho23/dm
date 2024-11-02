@@ -3,24 +3,31 @@ import { Text, type TextProps, StyleSheet } from 'react-native';
 import { useThemeColor } from '@/hooks/useThemeColor';
 
 export type ThemedTextProps = TextProps & {
-  lightColor?: string;
-  darkColor?: string;
+  color?: 'light' | 'gray' | 'black' | 'white'
   type?: 'default' | 'title' | 'defaultSemiBold' | 'subtitle' | 'link';
 };
 
+
 export function ThemedText({
   style,
-  lightColor,
-  darkColor,
   type = 'default',
+  color,
   ...rest
 }: ThemedTextProps) {
-  const color = useThemeColor({ light: lightColor, dark: darkColor }, 'text');
-
+  let currentTheme = '#774733'
+  if(color === 'gray') {
+    currentTheme = '#484848'
+  } if (color === 'black') {
+    currentTheme = '#000'
+  } if (color === 'white') {
+    currentTheme = '#FFF'
+  }
   return (
     <Text
       style={[
-        { color },
+        { color: currentTheme,
+          fontWeight: 'bold'
+        },
         type === 'default' ? styles.default : undefined,
         type === 'title' ? styles.title : undefined,
         type === 'defaultSemiBold' ? styles.defaultSemiBold : undefined,

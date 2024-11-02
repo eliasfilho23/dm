@@ -2,30 +2,52 @@
 
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { type IconProps } from "@expo/vector-icons/build/createIconSet";
-import headerImg from  '../../assets/images/header.png'
 import { type ComponentProps } from "react";
-import { Image } from "react-native";
+import { Image, ImageStyle, StyleProp, View } from "react-native";
 
 interface tabBarIcon
   extends IconProps<ComponentProps<typeof Ionicons>["name"]> {
-  useDefaultIcons: boolean;
-  iconName?: any;
+  useDefaultIcons?: boolean;
+  imageStyle?: StyleProp<ImageStyle>;
+  source?: any;
 }
-const headerImg = Image.resolveAssetSource(headerImg).uri
 export function TabBarIcon({
   style,
+  imageStyle,
   useDefaultIcons,
-  iconName,
+  source,
   ...rest
 }: tabBarIcon) {
-  let currentIconName = 'header'
-  currentIconName = iconName
-  const currentString: string = "@/assets/images/" + iconName + ".png"
+  let currentIconName = "header";
   if (useDefaultIcons) {
     return (
       <Ionicons size={28} style={[{ marginBottom: -3 }, style]} {...rest} />
     );
   } else {
-    return <Image source={{ uri: '../../assets/images/header.png'}} alt="s" />;
+    return (
+      <View style={{
+        backgroundColor: '#FEA873',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 8,
+        width: 50,
+        height: 50,
+        borderRadius: 8,
+      }}>
+        <Image
+          source={source}
+          alt=""
+          style={[
+            {
+              backgroundColor: "#FEA873",
+              width: '90%',
+              height: '90%',
+            },
+            imageStyle,
+          ]}
+        />
+      </View>
+    );
   }
 }
