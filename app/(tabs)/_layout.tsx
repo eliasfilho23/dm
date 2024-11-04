@@ -90,6 +90,21 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="tournaments/register"
+        options={{
+          href: null,
+          title: '',
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon
+              useDefaultIcons={false}
+              source={require("@/assets/svgs/trophy-full.svg")}
+              name={focused ? "code-slash" : "code-slash-outline"}
+              color={color}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="tournaments/subscription"
         options={{
           href: null,

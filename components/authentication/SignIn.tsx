@@ -2,22 +2,46 @@ import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { Pressable, TextInput } from "react-native";
 import RoundedBox from "../RoundedBox";
-import { Link, useRouter } from "expo-router";
+import { Link, useLocalSearchParams, useRouter } from "expo-router";
 import useAppData from "@/hooks/useAppData";
+import { useEffect, useState } from "react";
 
 export default function SignIn() {
+  const [data, setData] = useState({
+    email: "admin@gmail.com",
+    password: "256565",
+  });
+  const { email, password } = useLocalSearchParams();
+  console.log(email, password)
+  let placeholderEmail = "";
+  let placeholderPassword = "";
+  typeof email === "string" ? (placeholderEmail = email) : "";
+  typeof password === "string" ? (placeholderPassword = password) : "";
+
   const router = useRouter();
-  const stats = useAppData((state) => state.stats);
-  const setAdminPermission = useAppData((state) => state.setUserAsAdmin);
-  const updateStats = useAppData((state) => state.setStats);
+  const playerData = useAppData((state) => state.players);
   const setSession = useAppData((state) => state.setSession);
 
   function handleLogin() {
-    setAdminPermission()
-    setSession()
-    router.push("/");
-    return;
+    if (
+      playerData.find((el) => {
+        return el.email === data.email;
+      })
+    ) {
+      console.log('currentData:', playerData)
+      setSession();
+      router.push("/");
+      return;
+    } else {
+      console.log(data, playerData);
+    }
   }
+
+  useEffect(() => {
+    if (placeholderEmail !== "" && placeholderPassword !== "") {
+      setData({ email: placeholderEmail, password: placeholderPassword });
+    }
+  }, []);
 
   return (
     <ThemedView
@@ -48,10 +72,8 @@ export default function SignIn() {
       <RoundedBox theme="light">
         <TextInput
           placeholder=""
-          value={stats.email}
-          onChangeText={(text) => (
-            updateStats(text, stats.password)
-          )}
+          value={data.email}
+          onChangeText={(text) => setData({ ...data, email: text })}
         />
       </RoundedBox>
       <ThemedText
@@ -65,8 +87,8 @@ export default function SignIn() {
       <RoundedBox theme="light">
         <TextInput
           placeholder=""
-          value={stats.password}
-          onChangeText={(text) => updateStats(stats.email, text)}
+          value={data.password}
+          onChangeText={(text) => setData({ ...data, password: text })}
         />
       </RoundedBox>
       <Pressable onPressOut={handleLogin}>

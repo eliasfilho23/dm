@@ -3,27 +3,29 @@ import { ThemedView } from "@/components/ThemedView";
 import { Pressable, TextInput } from "react-native";
 import RoundedBox from "../RoundedBox";
 import { Link, useRouter } from "expo-router";
-import useAppData from "@/hooks/useAppData";
+import useAppData, { Stats } from "@/hooks/useAppData";
 import { useState } from "react";
 
 export default function SignUp() {
-  const [data, setData] = useState({
+  const [data, setData] = useState<Stats>({
     name: "Elias Lima da Silva Filho",
     password: "256565",
     email: "admin@gmail.com",
     city: "sao luis",
     phone: "98982426666",
+    admin: true,
   });
   const router = useRouter();
-  const stats = useAppData((state) => state.stats);
-  const setAdminPermission = useAppData((state) => state.setUserAsAdmin);
-  const updateStats = useAppData((state) => state.setStats);
+  const registerPlayer = useAppData((state) => state.registerPlayer);
   const setSession = useAppData((state) => state.setSession);
 
   function handleLogin() {
-    setAdminPermission();
+    registerPlayer(data);
     setSession();
-    router.push("/");
+    router.push({
+      pathname: "/signIn",
+      params: { email: data.email, password: data.password },
+    });
     return;
   }
 
@@ -102,9 +104,8 @@ export default function SignUp() {
         <TextInput
           placeholder=""
           value={data.city}
-          onChangeText={(text) => (
-            setData({...data, city: text})
-          )}        />
+          onChangeText={(text) => setData({ ...data, city: text })}
+        />
       </RoundedBox>
       <ThemedText
         style={{
@@ -117,10 +118,9 @@ export default function SignUp() {
       <RoundedBox theme="light">
         <TextInput
           placeholder=""
-          value={data.password}
-          onChangeText={(text) => (
-            setData({...data, phone: text})
-          )}        />
+          value={data.phone}
+          onChangeText={(text) => setData({ ...data, phone: text })}
+        />
       </RoundedBox>
       <Pressable onPressOut={handleLogin}>
         <RoundedBox>
@@ -129,30 +129,10 @@ export default function SignUp() {
               textAlign: "center",
             }}
           >
-            Login
-          </ThemedText>
-        </RoundedBox>
-      </Pressable>
-      <Link
-        href={"/signUp"}
-        style={{
-          marginTop: "75%",
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
-        <ThemedText style={{}}>Ainda não tem conta?</ThemedText>
-        <RoundedBox doubled={true}>
-          <ThemedText
-            style={{
-              textAlign: "center",
-              color: "white",
-            }}
-          >
             Registrar-se
           </ThemedText>
         </RoundedBox>
-      </Link>
+      </Pressable>
     </ThemedView>
   );
 }

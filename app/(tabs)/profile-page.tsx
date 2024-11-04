@@ -6,7 +6,7 @@ import React from "react";
 import { Image, Text } from "react-native";
 
 export default function ProfilePage() {
-  const data = useAppData((state) => state.stats)
+  const data = useAppData((state) => state.currentPlayer)
   return (
     <ThemedView
       style={{
@@ -109,7 +109,7 @@ export default function ProfilePage() {
             fontWeight: "bold",
           }}
         >
-          Cidade:
+          Cidade:{data.city}
         </ThemedText>
         <ThemedText
           style={{
@@ -117,7 +117,7 @@ export default function ProfilePage() {
             fontWeight: "bold",
           }}
         >
-          Telefone 1:
+          Telefone 1:{data.phone}
         </ThemedText>
         <ThemedText
           style={{

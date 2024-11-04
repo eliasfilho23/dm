@@ -40,10 +40,12 @@ export default function TournamentPageOnAdminView() {
             },
           }}
         >
-          <RoundedBox doubled={true}>
+          <RoundedBox style={{
+            marginLeft: 20
+          }}>
             <ThemedText
               style={{
-                color: "white",
+                color: "black",
                 textAlign: "center",
               }}
             >
@@ -64,7 +66,7 @@ export default function TournamentPageOnAdminView() {
           marginLeft: 20
         }}
       >
-        Detalhes
+        Registrar Partidas
       </ThemedText>
       <View
         style={{
@@ -76,7 +78,7 @@ export default function TournamentPageOnAdminView() {
       >
         <Link
           href={{
-            pathname: `/`,
+            pathname: `/(tabs)/tournaments/register`,
             params: {
               name: name,
               id: id,
@@ -90,7 +92,7 @@ export default function TournamentPageOnAdminView() {
                 textAlign: "center",
               }}
             >
-              Visualizar Detalhes Do Torneio
+              Ir para o registro de partidas
             </ThemedText>
           </RoundedBox>
         </Link>

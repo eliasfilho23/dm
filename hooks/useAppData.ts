@@ -6,53 +6,64 @@ export interface Tournament {
   place: string;
   category: string;
 }
+export interface Stats {
+  name: string;
+  email: string;
+  password: string;
+  phone: string;
+  city: string;
+  admin: boolean;
+}
 interface AppData {
   admin: boolean;
   logged: boolean;
-  stats: {
-    name?: string;
-    password: string;
-    email: string;
-    phone?: string;
-    city?: string;
-  };
+  currentPlayer: Stats;
+  players: Stats[];
+  books: string[];
   subscribedTournaments: string[];
   createdTournaments: Tournament[];
   createTournament: (newTournamentData: Tournament) => void;
+  uploadBook: (newBook: string) => void;
   subscribeOnTournament: (tournament: string) => void;
-  setUserAsAdmin: () => void;
+  registerPlayer: (player: Stats) => void;
   setSession: () => void;
-  setStats: (email: string, password: string) => void;
 }
 
 const useAppData = create<AppData>()((set) => ({
   admin: false,
   logged: false,
+  books: [],
+  players: [],
   createdTournaments: [],
   subscribedTournaments: [],
-  stats: {
+  currentPlayer: {
     email: "",
     password: "",
     name: "",
     phone: "",
     city: "",
+    admin: true,
   },
-  setUserAsAdmin: () => set(() => ({ admin: true })),
   setSession: () => set(() => ({ logged: true })),
-  createTournament: ({name, playerAmount, place, category}) =>
+  createTournament: ({ name, playerAmount, place, category }) =>
     set((state) => ({
       createdTournaments: [
         ...state.createdTournaments,
         { name, playerAmount, place, category },
       ],
     })),
+  registerPlayer: (newPlayer: Stats) =>
+    set((state) => ({
+      players: [...state.players, newPlayer],
+      currentPlayer: newPlayer,
+    })),
   subscribeOnTournament: (tournament) =>
     set((state) => ({
       subscribedTournaments: [...state.subscribedTournaments, tournament],
     })),
-  setStats: (newEmail, newPassword) =>
+  uploadBook: (book) =>
     set((state) => ({
-      stats: { ...state.stats, email: newEmail, password: newPassword },
+      books: [...state.books, book],
     })),
 }));
 
