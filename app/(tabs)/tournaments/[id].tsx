@@ -9,7 +9,7 @@ import { Pressable, Text, View } from "react-native";
 
 export default function TournamentDetail() {
   const { id, name } = useLocalSearchParams();
-  const adminPermission = useAppData((state) => state.admin);
+  const adminPermission = useAppData((state) => state.currentPlayer.admin);
 
   return (
     <ThemedView

@@ -2,11 +2,13 @@ import RoundedBox from "@/components/RoundedBox";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import useAppData from "@/hooks/useAppData";
+import { router } from "expo-router";
 import React from "react";
-import { Image, Text } from "react-native";
+import { Image, Pressable, Text } from "react-native";
 
 export default function ProfilePage() {
-  const data = useAppData((state) => state.currentPlayer)
+  const data = useAppData((state) => state.currentPlayer);
+  const endSession = useAppData((state) => state.endSession);
   return (
     <ThemedView
       style={{
@@ -128,6 +130,23 @@ export default function ProfilePage() {
           Telefone 2:
         </ThemedText>
       </RoundedBox>
+      <Pressable onPress={() => {
+        endSession()
+        router.push('/')
+      }}>
+        <RoundedBox
+          theme="light"
+          style={{
+            width: "30%",
+            marginHorizontal: "auto",
+            marginTop: 120,
+          }}
+        >
+          <ThemedText style={{ textAlign: "center", color: "darkred" }}>
+            Logout
+          </ThemedText>
+        </RoundedBox>
+      </Pressable>
     </ThemedView>
   );
 }

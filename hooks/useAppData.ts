@@ -2,9 +2,12 @@ import { create } from "zustand";
 
 export interface Tournament {
   name: string;
+  id?: number;
   playerAmount: number;
   place: string;
   category: string;
+  paid: boolean;
+  value?: string;
 }
 export interface Stats {
   name: string;
@@ -15,26 +18,35 @@ export interface Stats {
   admin: boolean;
 }
 interface AppData {
-  admin: boolean;
   logged: boolean;
   currentPlayer: Stats;
   players: Stats[];
   books: string[];
-  subscribedTournaments: string[];
+  subscribedTournaments: Tournament[];
   createdTournaments: Tournament[];
   createTournament: (newTournamentData: Tournament) => void;
   uploadBook: (newBook: string) => void;
-  subscribeOnTournament: (tournament: string) => void;
+  subscribeOnTournament: (tournament: Tournament) => void;
   registerPlayer: (player: Stats) => void;
   setSession: () => void;
+  endSession: () => void;
 }
 
 const useAppData = create<AppData>()((set) => ({
-  admin: false,
   logged: false,
   books: [],
   players: [],
-  createdTournaments: [],
+  createdTournaments: [
+    {
+      name: 'Campeonato Sub-20',
+      playerAmount: 13,
+      id: 20,
+      place: 'casa da mae joana',
+      category: 'porrada',
+      paid: true,
+      value: '20',
+    }
+  ],
   subscribedTournaments: [],
   currentPlayer: {
     email: "",
@@ -45,19 +57,27 @@ const useAppData = create<AppData>()((set) => ({
     admin: true,
   },
   setSession: () => set(() => ({ logged: true })),
-  createTournament: ({ name, playerAmount, place, category }) =>
+  endSession: () => set(() => ({
+    logged: false,
+    currentPlayer: {
+      name: '',
+      email: '',
+      password: '',
+      phone: '', 
+      city: '',
+      admin: false,
+    }
+  })),
+  createTournament: (tournament) =>
     set((state) => ({
-      createdTournaments: [
-        ...state.createdTournaments,
-        { name, playerAmount, place, category },
-      ],
+      createdTournaments: [...state.createdTournaments, tournament],
     })),
   registerPlayer: (newPlayer: Stats) =>
     set((state) => ({
       players: [...state.players, newPlayer],
       currentPlayer: newPlayer,
     })),
-  subscribeOnTournament: (tournament) =>
+  subscribeOnTournament: (tournament: Tournament) =>
     set((state) => ({
       subscribedTournaments: [...state.subscribedTournaments, tournament],
     })),

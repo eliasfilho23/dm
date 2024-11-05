@@ -6,6 +6,7 @@ import useAppData from "@/hooks/useAppData";
 
 export default function Home() {
   const data = useAppData()
+  console.log(data)
   if(!data.logged) {
     return <Redirect href={'/signIn'}/>
   }

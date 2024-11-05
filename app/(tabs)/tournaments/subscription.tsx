@@ -1,11 +1,32 @@
 import RoundedBox from "@/components/RoundedBox";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import { useLocalSearchParams } from "expo-router";
-import { Image, Text, View } from "react-native";
+import showToast from "@/components/toast";
+import useAppData from "@/hooks/useAppData";
+import { router, useLocalSearchParams } from "expo-router";
+import { Image, Pressable } from "react-native";
 
 export default function TournamentSubscription() {
   const { id, name } = useLocalSearchParams();
+  const subscribeOnTournament = useAppData(
+    (state) => state.subscribeOnTournament
+  );
+  const tournaments = useAppData((state) => state.createdTournaments);
+  function registerOnTournament() {
+    if (typeof id === "string") {
+      const currentTournament = tournaments.find((el) => {
+        return el.id === parseInt(id);
+      });
+      if (currentTournament) {
+        subscribeOnTournament(currentTournament);
+      } else {
+        showToast("Campeonato não encontrado", "error");
+      }
+      router.push("/tournaments");
+      showToast("Inscrição realizada com sucesso!");
+    }
+  }
+
   return (
     <ThemedView
       style={{
@@ -46,12 +67,16 @@ export default function TournamentSubscription() {
       >
         Efetue o pagamento via PIX para continuar a operação
       </ThemedText>
-      <Image style={{
-        marginVertical: 20
-      }} source={require("@/assets/images/qrcode.png")} />
+      <Pressable onPress={registerOnTournament}>
+        <Image
+          style={{
+            marginVertical: 20,
+          }}
+          source={require("@/assets/images/qrcode.png")}
+        />
+      </Pressable>
 
-      <RoundedBox doubled={true} style={{
-      }}>
+      <RoundedBox doubled={true} style={{}}>
         <ThemedText
           style={{
             color: "white",

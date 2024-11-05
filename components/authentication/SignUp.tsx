@@ -2,9 +2,10 @@ import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { Pressable, TextInput } from "react-native";
 import RoundedBox from "../RoundedBox";
-import { Link, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import useAppData, { Stats } from "@/hooks/useAppData";
 import { useState } from "react";
+import showToast from "../toast";
 
 export default function SignUp() {
   const [data, setData] = useState<Stats>({
@@ -13,7 +14,7 @@ export default function SignUp() {
     email: "admin@gmail.com",
     city: "sao luis",
     phone: "98982426666",
-    admin: true,
+    admin: false,
   });
   const router = useRouter();
   const registerPlayer = useAppData((state) => state.registerPlayer);
@@ -22,6 +23,7 @@ export default function SignUp() {
   function handleLogin() {
     registerPlayer(data);
     setSession();
+    showToast('Cadastramento realizado com sucesso!')
     router.push({
       pathname: "/signIn",
       params: { email: data.email, password: data.password },

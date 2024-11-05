@@ -5,6 +5,7 @@ import RoundedBox from "../RoundedBox";
 import { Link, useLocalSearchParams, useRouter } from "expo-router";
 import useAppData from "@/hooks/useAppData";
 import { useEffect, useState } from "react";
+import showToast from "../toast";
 
 export default function SignIn() {
   const [data, setData] = useState({
@@ -12,12 +13,10 @@ export default function SignIn() {
     password: "256565",
   });
   const { email, password } = useLocalSearchParams();
-  console.log(email, password)
   let placeholderEmail = "";
   let placeholderPassword = "";
   typeof email === "string" ? (placeholderEmail = email) : "";
   typeof password === "string" ? (placeholderPassword = password) : "";
-
   const router = useRouter();
   const playerData = useAppData((state) => state.players);
   const setSession = useAppData((state) => state.setSession);
@@ -28,12 +27,11 @@ export default function SignIn() {
         return el.email === data.email;
       })
     ) {
-      console.log('currentData:', playerData)
       setSession();
       router.push("/");
       return;
     } else {
-      console.log(data, playerData);
+      showToast("Usuário ou senha Inválidos!", "error");
     }
   }
 
@@ -122,6 +120,7 @@ export default function SignIn() {
           </ThemedText>
         </RoundedBox>
       </Link>
+      {/* <Toast /> */}
     </ThemedView>
   );
 }
