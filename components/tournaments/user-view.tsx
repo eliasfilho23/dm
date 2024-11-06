@@ -1,67 +1,62 @@
-import {
-  findTournamentById,
-  tournamentColorDefinitor,
-} from "@/app/(tabs)/tournaments";
 import RoundedBox from "@/components/RoundedBox";
 import { ThemedText } from "@/components/ThemedText";
-import { Link, useLocalSearchParams } from "expo-router";
+import { Link, router, useLocalSearchParams } from "expo-router";
 import { Pressable, View } from "react-native";
 import { ThemedView } from "../ThemedView";
 import useAppData, { Tournament } from "@/hooks/useAppData";
+import showToast from "../toast";
 
 export default function TournamentPageOnUserView() {
-  const { id, name, paid } = useLocalSearchParams();
+  const { id, name } = useLocalSearchParams();
   let alreadySubscribed: boolean = false;
-  const tournamentData = useAppData((state) => state.createdTournaments)
-  const subscribeOnTournament = useAppData((state) => state.subscribeOnTournament)
-  const alreadySubscribedTournaments = useAppData((state) => state.subscribedTournaments)
-  console.log(tournamentData)
-  
-  function returnPaidCondition(){
-    if (typeof id === 'string'){
+  const tournamentData = useAppData((state) => state.createdTournaments);
+  // const subscribeOnTournament = useAppData((state) => state.subscribeOnTournament)
+  // const alreadySubscribedTournaments = useAppData((state) => state.subscribedTournaments)
+  const actualId = typeof id === "string" ? parseInt(id) : "";
+  function findTournamentById() {
+    const currentTournament = tournamentData.find((el) => {
+      return el.id == actualId;
+    });
+    return currentTournament;
+  }
+  const currentTournament = findTournamentById();
+  const subscribeOnTournament = useAppData(
+    (state) => state.subscribeOnTournament
+  );
+  const paid = currentTournament?.paid;
+  console.log(tournamentData);
+
+  function returnPaidCondition() {
+    if (typeof id === "string") {
       tournamentData.find((el) => {
-        if(el.id === parseInt(id)){
-          return el.paid
+        if (el.id === parseInt(id)) {
+          return el.paid;
         }
-      })
+      });
       return;
-    } 
+    }
   }
   const placeholderTournament = {
-    name: 'Campeonato Sub-20',
+    name: "Campeonato Sub-20",
     playerAmount: 4,
     id: 20,
-    place: 'Sao Luis',
-    category: '10x10',
+    place: "Sao Luis",
+    category: "10x10",
     paid: true,
-    value: '20',
-  }
-  function getCurrentTournament() {
-    if (typeof id === "string") {
-      const currentTournament = findTournamentById(parseInt(id))
-      return currentTournament;
-    }
-  }
-
-  if (typeof id === "string") {
-    const currentTournament = findTournamentById(parseInt(id))
-    const isSubscribed = alreadySubscribedTournaments.find((el) => {
-      return el === currentTournament
-    })
-    if(isSubscribed){
-      alreadySubscribed = true
-    }
-  }
-
+    value: "20",
+  };
 
   return (
     <View>
       {alreadySubscribed ? (
-        <RoundedBox theme="light" style={{
-          marginHorizontal: 'auto',
-          marginVertical: 0
-        }} >
-          <ThemedText style={{ fontStyle: 'italic', textAlign: 'center'}}>
+        <RoundedBox
+          theme="light"
+          style={{
+            marginHorizontal: "auto",
+            marginVertical: 0,
+          }}
+        >
+          <ThemedText style={{ fontStyle: "italic", textAlign: "center" }}>
             Você já está inscrito nesse campeonato.
           </ThemedText>
         </RoundedBox>
@@ -74,7 +69,7 @@ export default function TournamentPageOnUserView() {
               fontWeight: "bold",
               textAlign: "left",
               width: "80%",
-              marginLeft: 20
+              marginLeft: 20,
             }}
           >
             Inscrição
@@ -85,43 +80,60 @@ export default function TournamentPageOnUserView() {
               backgroundColor: "black",
               height: 2,
               marginVertical: 3,
-              marginHorizontal: 'auto'
+              marginHorizontal: "auto",
             }}
           >
-            {paid === 'true'? <Link
-              href={{
-                pathname: `/tournaments/subscription`,
-                params: {
-                  name: name,
-                  id: id,
-                },
-              }}
-            >
-              <RoundedBox doubled={true}>
-                <ThemedText
-                  style={{
-                    color: "white",
-                    textAlign: "center",
-                  }}
-                >
-                  Inscrever-se
-                </ThemedText>
-              </RoundedBox>
-            </Link> : 
-            <Pressable onPress={() => {
-              subscribeOnTournament(getCurrentTournament()? getCurrentTournament() : placeholderTournament)
-            }}>
-                            <RoundedBox doubled={true}>
-                <ThemedText
-                  style={{
-                    color: "white",
-                    textAlign: "center",
-                  }}
-                >
-                  Inscrever-se
-                </ThemedText>
-              </RoundedBox>
-              </Pressable>}
+            {paid === true ? (
+              <Link
+                href={{
+                  pathname: `/tournaments/subscription`,
+                  params: {
+                    name: name,
+                    id: id,
+                  },
+                }}
+              >
+                <RoundedBox doubled={true}>
+                  <ThemedText
+                    style={{
+                      color: "white",
+                      textAlign: "center",
+                    }}
+                  >
+                    Inscrever-se
+                  </ThemedText>
+                </RoundedBox>
+              </Link>
+            ) : (
+              <Pressable
+                onPress={() => {
+                  showToast("Inscrição realizada com sucesso");
+                  subscribeOnTournament(
+                    currentTournament
+                      ? currentTournament
+                      : {
+                          name: "",
+                          playerAmount: 16,
+                          place: "pneu furado - Codó",
+                          category: "16x16",
+                          paid: false,
+                        }
+                  );
+                  router.push("/tournaments");
+                }}
+              >
+                <RoundedBox doubled={true}>
+                  <ThemedText
+                    style={{
+                      color: "white",
+                      textAlign: "center",
+                    }}
+                  >
+                    Inscrever-se
+                  </ThemedText>
+                </RoundedBox>
+              </Pressable>
+            )}
           </View>
         </>
       )}
@@ -158,7 +170,7 @@ export default function TournamentPageOnUserView() {
             width: "90%",
           }}
         >
-          10 / 10
+          {}
         </ThemedText>
       </View>
       <View

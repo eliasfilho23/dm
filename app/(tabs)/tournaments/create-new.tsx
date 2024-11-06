@@ -3,28 +3,35 @@ import { ThemedView } from "@/components/ThemedView";
 import { Pressable, TextInput, View } from "react-native";
 import { Link, useRouter } from "expo-router";
 import useAppData, { Tournament } from "@/hooks/useAppData";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import RoundedBox from "@/components/RoundedBox";
 import { Switch } from "react-native-gesture-handler";
 
 export default function SignUp() {
+  const randomNumber = () => { return Math.floor(Math.random() * 1000) + 1}
   const [data, setData] = useState<Tournament>({
     name: "38o Campeonato Bimestral de Pneu Furado",
     playerAmount: 16,
     place: "pneu furado - Codó",
     category: "16x16",
-    paid: false,  // Certifique-se de que 'paid' está incluído no estado inicial
+    paid: false,
   });
-
+  function booleanPropertyToggler(property: boolean) {
+    property === true ? (property = false) : (property = true);
+    console.log(property);
+    return property;
+  }
   const router = useRouter();
-  const createTournament = useAppData((state) => state.createTournament);
 
-  // Função para criar torneio e navegar para a página de torneios
+  const createTournament = useAppData((state) => state.createTournament);
   function handleCreation() {
-    createTournament(data);  // Usa o valor de 'data' sem forçar 'paid: true'
+    createTournament({...data, id:randomNumber()});
     router.push("/(tabs)/tournaments");
   }
-
+  useEffect(() => {
+    data.paid ? '' : setData({...data, value: undefined})
+    console.log(data.paid) 
+  }, [data.paid])
   return (
     <ThemedView
       style={{
@@ -34,10 +41,23 @@ export default function SignUp() {
         alignItems: "center",
       }}
     >
-      <ThemedText style={{ color: "black", fontSize: 20, paddingVertical: 20 }}>
+      <ThemedText
+        style={{
+          color: "black",
+          fontSize: 20,
+          paddingVertical: 20,
+        }}
+      >
         Criar Novo Campeonato
       </ThemedText>
-      <ThemedText style={{ width: "85%", textAlign: "left" }}>Nome</ThemedText>
+      <ThemedText
+        style={{
+          width: "85%",
+          textAlign: "left",
+        }}
+      >
+        Nome
+      </ThemedText>
       <RoundedBox theme="light">
         <TextInput
           placeholder=""
@@ -45,17 +65,31 @@ export default function SignUp() {
           onChangeText={(text) => setData({ ...data, name: text })}
         />
       </RoundedBox>
-
-      <ThemedText style={{ width: "85%", textAlign: "left" }}>Quantidade de jogadores:</ThemedText>
+      <ThemedText
+        style={{
+          width: "85%",
+          textAlign: "left",
+        }}
+      >
+        Quantidade de jogadores:
+      </ThemedText>
       <RoundedBox theme="light">
         <TextInput
           placeholder=""
           value={data.playerAmount.toString()}
-          onChangeText={(text) => setData({ ...data, playerAmount: parseInt(text) || 0 })}
+          onChangeText={(text) =>
+            setData({ ...data, playerAmount: parseInt(text) })
+          }
         />
       </RoundedBox>
-
-      <ThemedText style={{ width: "85%", textAlign: "left" }}>Categoria:</ThemedText>
+      <ThemedText
+        style={{
+          width: "85%",
+          textAlign: "left",
+        }}
+      >
+        Categoria:
+      </ThemedText>
       <RoundedBox theme="light">
         <TextInput
           placeholder=""
@@ -63,8 +97,14 @@ export default function SignUp() {
           onChangeText={(text) => setData({ ...data, category: text })}
         />
       </RoundedBox>
-
-      <ThemedText style={{ width: "85%", textAlign: "left" }}>Cidade:</ThemedText>
+      <ThemedText
+        style={{
+          width: "85%",
+          textAlign: "left",
+        }}
+      >
+        Cidade:
+      </ThemedText>
       <RoundedBox theme="light">
         <TextInput
           placeholder=""
@@ -72,21 +112,65 @@ export default function SignUp() {
           onChangeText={(text) => setData({ ...data, place: text })}
         />
       </RoundedBox>
-
-      <ThemedText style={{ width: "85%", textAlign: "left" }}>Pago?</ThemedText>
-      <View style={{ display: "flex", alignContent: "flex-start", width: "85%" }}>
+      <ThemedText
+        style={{
+          width: "85%",
+          textAlign: "left",
+        }}
+      >
+        Pago?
+      </ThemedText>
+      <View
+        style={{
+          display: "flex",
+          alignContent: "flex-start",
+          width: "85%",
+        }}
+      >
         <Switch
-          onValueChange={() => setData({ ...data, paid: !data.paid })}
+          onValueChange={() =>
+            setData({ ...data, paid: booleanPropertyToggler(data.paid) })
+          }
           value={data.paid}
         />
+        {data.paid && (
+          <RoundedBox
+            theme="light"
+            style={{
+              display: "flex",
+              flexDirection: "row",
+            }}
+          >
+            <ThemedText
+              style={{
+                width: "85%",
+                textAlign: "left",
+              }}
+            >
+              Valor:
+            </ThemedText>
+            <TextInput
+              placeholder=""
+              onChangeText={(text) => setData({ ...data, value: text })}
+              style={{
+                textAlign: 'right'
+              }}
+            />
+          </RoundedBox>
+        )}
       </View>
 
       <Pressable onPress={handleCreation}>
         <RoundedBox>
-          <ThemedText style={{ textAlign: "center" }}>Criar</ThemedText>
+          <ThemedText
+            style={{
+              textAlign: "center",
+            }}
+          >
+            Criar
+          </ThemedText>
         </RoundedBox>
       </Pressable>
-
       <Link
         href={"/signUp"}
         style={{

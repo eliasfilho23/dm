@@ -4,12 +4,12 @@ import { Pressable, TextInput } from "react-native";
 import RoundedBox from "../RoundedBox";
 import { useRouter } from "expo-router";
 import useAppData, { Stats } from "@/hooks/useAppData";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import showToast from "../toast";
 
 export default function SignUp() {
   const [data, setData] = useState<Stats>({
-    name: "Elias Lima da Silva Filho",
+    name: "Jose da Silva",
     password: "256565",
     email: "admin@gmail.com",
     city: "sao luis",
@@ -19,22 +19,26 @@ export default function SignUp() {
   const router = useRouter();
   const registerPlayer = useAppData((state) => state.registerPlayer);
   const setSession = useAppData((state) => state.setSession);
+  const playerData = useAppData((state) => state.players);
 
   function handleLogin() {
-    data.email === 'admin@gmail.com' ? setData((prevData) => {
-      const updatedData = { ...prevData, admin: true };
-      console.log(updatedData.admin);
-      registerPlayer(updatedData);
-      return updatedData;
-    }) : ''
+    data.email === "admin@gmail.com"
+      ? setData((prevData) => ({ ...prevData, admin: true }))
+      : setData((prevData) => ({ ...prevData, admin: false }));
     setSession();
-    showToast('Cadastramento realizado com sucesso!')
+    registerPlayer(data);
+    showToast("Cadastramento realizado com sucesso!");
+    console.log(playerData);
     router.push({
       pathname: "/signIn",
       params: { email: data.email, password: data.password },
     });
     return;
   }
+
+  useEffect(() => {
+    registerPlayer(data);
+  }, [data.admin])
 
   return (
     <ThemedView

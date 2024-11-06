@@ -1,4 +1,3 @@
-import { findTournamentById } from "@/app/(tabs)/tournaments";
 import RoundedBox from "@/components/RoundedBox";
 import { ThemedText } from "@/components/ThemedText";
 import useAppData from "@/hooks/useAppData";

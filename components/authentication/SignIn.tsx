@@ -19,8 +19,8 @@ export default function SignIn() {
   typeof password === "string" ? (placeholderPassword = password) : "";
   const router = useRouter();
   const playerData = useAppData((state) => state.players);
-  console.log(playerData)
   const setSession = useAppData((state) => state.setSession);
+  console.log(playerData)
 
   function handleLogin() {
     if (
@@ -85,6 +85,7 @@ export default function SignIn() {
       </ThemedText>
       <RoundedBox theme="light">
         <TextInput
+          secureTextEntry={true}
           placeholder=""
           value={data.password}
           onChangeText={(text) => setData({ ...data, password: text })}

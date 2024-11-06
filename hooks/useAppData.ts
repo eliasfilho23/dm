@@ -2,7 +2,7 @@ import { create } from "zustand";
 
 export interface Tournament {
   name: string;
-  id?: number;
+  id?: number | string;
   playerAmount: number;
   place: string;
   category: string;
@@ -37,13 +37,6 @@ const useAppData = create<AppData>()((set) => ({
   books: [],
   players: [],
   createdTournaments: [
-    {
-      name: "38o Campeonato Bimestral de Codó",
-      playerAmount: 16,
-      place: "praca municipal - Codó",
-      category: "8x8",
-      paid: false,
-    }
   ],
   subscribedTournaments: [],
   currentPlayer: {
