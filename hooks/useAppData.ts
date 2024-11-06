@@ -38,13 +38,11 @@ const useAppData = create<AppData>()((set) => ({
   players: [],
   createdTournaments: [
     {
-      name: 'Campeonato Sub-20',
-      playerAmount: 13,
-      id: 20,
-      place: 'casa da mae joana',
-      category: 'porrada',
-      paid: true,
-      value: '20',
+      name: "38o Campeonato Bimestral de Codó",
+      playerAmount: 16,
+      place: "praca municipal - Codó",
+      category: "8x8",
+      paid: false,
     }
   ],
   subscribedTournaments: [],

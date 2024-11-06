@@ -19,6 +19,7 @@ export default function SignIn() {
   typeof password === "string" ? (placeholderPassword = password) : "";
   const router = useRouter();
   const playerData = useAppData((state) => state.players);
+  console.log(playerData)
   const setSession = useAppData((state) => state.setSession);
 
   function handleLogin() {

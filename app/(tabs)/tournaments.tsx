@@ -11,6 +11,7 @@ export const tournamentColorDefinitor = (tournament: Tournament) => {
   const subscribedTournaments = useAppData(
     (state) => state.subscribedTournaments
   );
+  console.log(subscribedTournaments)
   const isIn = subscribedTournaments.find((el) => {
     return el === tournament;
   });
@@ -91,6 +92,7 @@ export default function Tournaments() {
                   id: "20",
                   category: el.category,
                   playerAmount: el.playerAmount,
+                  paid: el.paid === true ? 'paid' : 'free' 
                 },
               }}
               style={{
@@ -154,7 +156,7 @@ export default function Tournaments() {
                   marginTop: 5,
                 }}
               >
-                {tournamentColorDefinitor(el)
+                {tournamentColorDefinitor(el) === 'light'
                   ? ""
                   : "Você não está inscrito neste campeonato"}
               </ThemedText>
@@ -202,7 +204,7 @@ export default function Tournaments() {
               marginTop: 5,
             }}
           >
-            Você não está classificado para esse campeonato.
+            Você não está inscrito neste campeonato
           </ThemedText>
         </Link>
       </RoundedBox>

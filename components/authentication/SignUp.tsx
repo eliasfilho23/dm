@@ -21,7 +21,12 @@ export default function SignUp() {
   const setSession = useAppData((state) => state.setSession);
 
   function handleLogin() {
-    registerPlayer(data);
+    data.email === 'admin@gmail.com' ? setData((prevData) => {
+      const updatedData = { ...prevData, admin: true };
+      console.log(updatedData.admin);
+      registerPlayer(updatedData);
+      return updatedData;
+    }) : ''
     setSession();
     showToast('Cadastramento realizado com sucesso!')
     router.push({
